@@ -1,7 +1,7 @@
 # World Bank Development Indicators - Use for Economic Predictions
 
-This project was done to experiment with supervised, shallow algorithm, machine learning classification modeling. 
-My model was optimized to predict whether an economy would be growing or shrinking in the next measured year. 
+Supervised, shallow algorithm, machine learning classification modeling to predict if an economy will be growing or shrinking. 
+Model was optimized to predict whether an economy would be growing or shrinking in the next measured year. 
 It uses the World Bank Open Data Initiative's world development indicators published in July 2017.
 
 ### World Bank Data Explorations and Model Selection
