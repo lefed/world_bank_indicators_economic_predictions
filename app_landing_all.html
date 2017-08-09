@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>World Bank Data Explorer</title>
+    <link rel="stylesheet" href="static/d3.slider.css" />
+    <style>
+
+     body {
+       font-family: Verdana,Arial,sans-serif;
+     }
+
+     h2 {
+       font-size: 1.2em;
+       margin: 60px 0 5px 0;
+       color: gray
+     }
+
+     h4 {
+       color: gray
+     }
+
+     .space {
+       margin-bottom: 20 px;
+     }
+
+     .wrapper {
+       width: 800px;
+       margin-left: auto;
+       margin-right: auto;
+       margin-bottom: 0px;
+     }
+
+     #bar_chart {
+       margin-bottom: 0 px;
+     }
+
+     .bar {
+       fill: #30729c;
+     }
+
+     span {
+       color: steelblue;
+     }
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <div id="chart_area" class="wrapper">
+      <h2>Likelihood of Economy Shrinking in next Measured Year</h2>
+      <p class="space"></p>
+      <div id="bar_chart">
+      </div>
+    </div>
+
+    <div id="sliders" class="wrapper">
+      
+      <h4 class="feature">Age dependency ratio (% of working-age population): <span id="sp_pop_dpnd_ol">12</span></h4>
+      <div id="pop_dpnd_old_slider"></div>
+
+      <h4 class="feature">Mortality rate, infant (per 1,000 live births): <span id="sp_dyn_imrt_in">2</span></h4>
+      <div id="sp_dyn_imrt_in_slider"></div>
+
+      <h4 class="feature">Mortality rate, under-5 (per 1,000 live births):<span id="sp_dyn_mort">2</span></h4>
+      <div id="sp_dyn_mort_slider"></div>
+
+      <h4 class="feature">Forest rents (% of GDP):<span id="ny_gdp_frst_rt_zs">2</span></h4>
+      <div id="ny_gdp_frst_rt_zs_slider"></div>
+
+      <h4 class="feature">Deviation from mean - Population ages 20-24, female (% of female population):<span id="dev_sp_pop_2024_fe_5y">0</span></h4>
+      <div id="dev_sp_pop_2024_fe_5y_slider"></div>
+
+      <h4 class="feature">Population ages 20-24, female (% of female population):<span id="sp_pop_2024_fe_5y">8.5</span></h4>
+      <div id="sp_pop_2024_fe_5y_slider"></div>
+
+      <h4 class="feature">Population ages 30-34, female (% of female population):<span id="sp_pop_3034_fe_5y">7</span></h4>
+      <div id="sp_pop_3034_fe_5y_slider"></div>
+
+      <h4 class="feature">Gross savings (% of GNI):<span id="ny_gns_ictr_gn_zs">22</span></h4>
+      <div id="ny_gns_ictr_gn_zs_slider"></div>
+
+      <h4 class="feature">Rate of change of military spending (%):<span id="time_del_ms_mil">0</span></h4>
+      <div id="time_del_ms_mil_slider"></div>
+
+      
+      <h4 class="feature"> Fertility rate, total (births per woman):<span id="sp_dyn_tfrt_in">3</span></h4>
+      <div id="sp_dyn_tfrt_in_slider"></div>
+
+      <h4 class="feature"> CO2 Emissions, metric tonnes per capita:<span id="en_atm_co2e_pc">3</span></h4>
+      <div id="en_atm_co2e_pc_slider"></div>
+
+      <h4 class="feature"> Population ages 55-59, female (% of female population):<span id="SP_POP_5559_FE_5Y">3</span></h4>
+      <div id="SP_POP_5559_FE_5Y_slider"></div>
+      
+      <h4 class="feature"> Imports of goods and services (% of GDP):<span id="NE_IMP_GNFS_ZS">35</span></h4>
+      <div id="NE_IMP_GNFS_ZS_slider"></div>
+      
+      <h4 class="feature">Gross domestic savings (% of GDP):<span id="NY_GDS_TOTL_ZS">20</span></h4>
+      <div id="NY_GDS_TOTL_ZS_slider"></div>
+      
+      <h4 class="feature"> Fuel imports (% of merchandise imports):<span id="TM_VAL_FUEL_ZS_UN">14</span></h4>
+      <div id="TM_VAL_FUEL_ZS_UN_slider"></div>
+      
+      <h4 class="feature"> Domestic credit to private sector (% of GDP):<span id="FS_AST_PRVT_GD_ZS">47</span></h4>
+      <div id="FS_AST_PRVT_GD_ZS_slider"></div>
+      
+      <h4 class="feature"> School enrollment, primary (% gross):<span id="SE_PRM_ENRR">100</span></h4>
+      <div id="SE_PRM_ENRR_slider"></div>
+      
+      <h4 class="feature"> Services, etc., value added (% of GDP):<span id="NV_SRV_TETC_ZS">55</span></h4>
+      <div id="NV_SRV_TETC_ZS_slider"></div>
+      
+      <h4 class="feature"> Deviation from mean - Food production index (2004-2006 = 100):<span id="dev_AG_PRD_FOOD_XD">0</span></h4>
+      <div id="dev_AG_PRD_FOOD_XD_slider"></div>
+      
+      <h4 class="feature"> Mobile cellular subscriptions (per 100 people):<span id="IT_CEL_SETS_P2">35</span></h4>
+      <div id="IT_CEL_SETS_P2_slider"></div>
+      
+      <h4 class="feature"> Death rate, crude (per 1,000 people):<span id="SP_DYN_CDRT_IN">10</span></h4>
+      <div id="SP_DYN_CDRT_IN_slider"></div>
+      
+      <h4 class="feature"> Rate of change of Age dependency ratio (% of working-age population):<span id=" time_diff_SP_POP_DPND ">0</span></h4>
+      <div id="time_diff_SP_POP_DPND_slider"></div>
+      
+      <h4 class="feature"> Adjusted savings: carbon dioxide damage (% of GNI):<span id="NY_ADJ_DCO2_GN_ZS">2</span></h4>
+      <div id="NY_ADJ_DCO2_GN_ZS_slider"></div>
+      
+      <h4 class="feature"> Industry, value added (% of GDP):<span id="NV_IND_TOTL_ZS">30</span></h4>
+      <div id="NV_IND_TOTL_ZS_slider"></div>
+      
+      <h4 class="feature"> Life expectancy at birth, male (years):<span id="SP_DYN_LE00_MA_IN">65</span></h4>
+      <div id="SP_DYN_LE00_MA_IN_slider"></div>
+      
+      <h4 class="feature"> Survival to age 65, male (% of cohort):<span id="SP_DYN_TO65_MA_ZS">64</span></h4>
+      <div id="SP_DYN_TO65_MA_ZS_slider"></div>
+      
+      <h4 class="feature"> Total reserves in months of imports:<span id="FI_RES_TOTL_MO">5</span></h4>
+      <div id="FI_RES_TOTL_MO_slider"></div>
+      
+      <h4 class="feature"> Change from previous measurement crop production index (2004-2006 = 100):<span id="time_del_AG_PRD_CROP_XD">2</span></h4>
+      <div id="time_del_AG_PRD_CROP_XD_slider"></div>
+      
+      <h4 class="feature"> Inflation, GDP deflator (annual %):<span id="NY_GDP_DEFL_KD_ZG">2</span></h4>
+      <div id="NY_GDP_DEFL_KD_ZG_slider"></div>
+      
+      <h4 class="feature"> Life expectancy at birth, female (years):<span id="SP_DYN_LE00_FE_IN">70</span></h4>
+      <div id="SP_DYN_LE00_FE_IN_slider"></div>
+      
+      <h4 class="feature"> Rural population (% of total population):<span id="SP_RUR_TOTL_ZS">40</span></h4>
+      <div id="SP_RUR_TOTL_ZS_slider"></div>
+      
+      <h4 class="feature"> Trade (% of GDP):<span id="NE_TRD_GNFS_ZS">70</span></h4>
+      <div id="NE_TRD_GNFS_ZS_slider"></div>
+
+    </div>
+
+    <!-- Import the libraries: jQuery, d3, d3.slider -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="static/d3.slider.js"></script>
+
+    <script>
+
+      <!-- SINGLE BAR CHART -->
+      var current_pop_dpnd_old = 12;
+      var current_sp_dyn_imrt_in = 2;
+      var current_sp_dyn_mort =2;
+      var current_ny_gdp_frst_rt_zs =2;
+      var current_dev_sp_pop_2024_fe_5y=0;
+      var current_sp_pop_2024_fe_5y=8.5;
+      var current_sp_pop_3034_fe_5y=7;
+      var current_ny_gns_ictr_gn_zs=22;
+      var current_time_del_ms_mil=0;
+      var current_sp_dyn_tfrt_in=3;
+      var current_en_atm_co2e_pc=5;
+      var current_SP_POP_5559_FE_5Y=3;
+      var current_NE_IMP_GNFS_ZS=35;
+      var current_NY_GDS_TOTL_ZS=20;
+      var current_TM_VAL_FUEL_ZS_UN=14;
+      var current_FS_AST_PRVT_GD_ZS=47;
+      var current_SE_PRM_ENRR=100;
+      var current_NV_SRV_TETC_ZS=55;
+      var current_dev_AG_PRD_FOOD_XD=0;
+      var current_IT_CEL_SETS_P2=35;
+      var current_SP_DYN_CDRT_IN=10;
+      var current_time_diff_SP_POP_DPND=0;
+      var current_NY_ADJ_DCO2_GN_ZS=2;
+      var current_NV_IND_TOTL_ZS=30;
+      var current_SP_DYN_LE00_MA_IN=65;
+      var current_SP_DYN_TO65_MA_ZS=64;
+      var current_FI_RES_TOTL_MO=5;
+      var current_time_del_AG_PRD_CROP_XD=2;
+      var current_NY_GDP_DEFL_KD_ZG=2;
+      var current_SP_DYN_LE00_FE_IN=70;
+      var current_SP_RUR_TOTL_ZS=40;
+      var current_NE_TRD_GNFS_ZS=70;
+       
+      var current_prob = 20;
+
+     var chart = d3.select("#bar_chart")
+                   .append("svg:svg")
+                   .attr("width", 800)
+                   .attr("height", 100);
+
+     var chance_scale = d3.scale.linear()
+                                .domain([0, 100])
+                                .range([0, 800]);
+
+     var bar = chart.append("g")
+                    .attr("class", "bar")
+
+       bar.append("svg:rect")
+          .attr("id", "chancebar")
+          .attr("class", "bar")
+          .attr("width", chance_scale(current_prob))
+          .attr("height", 50);
+
+     bar.append("text")
+        .attr("id", "percent_text")
+        .attr("dy", ".75em")
+        .attr("y", 15)
+        .attr("x", chance_scale(current_prob-5))
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .attr("font-size", 20)
+        .text( current_prob.toFixed(1) + "%");
+
+
+     <!-- FUNCTION TO GET CHANCE FROM YOUR PREDICTOR WITH AJAX AND CHANGE BAR  HEIGHT -->
+     function getAndDrawChance(sp_pop_dpnd_ol, sp_dyn_imrt_in, sp_dyn_mort, ny_gdp_frst_rt_zs, dev_sp_pop_2024_fe_5y, sp_pop_2024_fe_5y, sp_pop_3034_fe_5y, ny_gns_ictr_gn_zs, time_del_ms_mil, sp_dyn_tfrt_in, en_atm_co2e_pc, SP_POP_5559_FE_5Y, NE_IMP_GNFS_ZS, NY_GDS_TOTL_ZS, TM_VAL_FUEL_ZS_UN, FS_AST_PRVT_GD_ZS, SE_PRM_ENRR, NV_SRV_TETC_ZS, dev_AG_PRD_FOOD_XD, IT_CEL_SETS_P2, SP_DYN_CDRT_IN, time_diff_SP_POP_DPND, NY_ADJ_DCO2_GN_ZS, NV_IND_TOTL_ZS, SP_DYN_LE00_MA_IN, SP_DYN_TO65_MA_ZS, FI_RES_TOTL_MO, time_del_AG_PRD_CROP_XD, NY_GDP_DEFL_KD_ZG, SP_DYN_LE00_FE_IN, SP_RUR_TOTL_ZS, NE_TRD_GNFS_ZS ){
+
+       $.ajax({
+         type: "POST",
+         contentType: "application/json; charset=utf-8",
+         url: "/score",
+         dataType: "json",
+         async: true,
+         data: "{\"example\": ["+sp_pop_dpnd_ol+", "+sp_dyn_imrt_in+", "+sp_dyn_mort+", "+ny_gdp_frst_rt_zs+", "+dev_sp_pop_2024_fe_5y+", "+sp_pop_2024_fe_5y+", "+sp_pop_3034_fe_5y+", "+ny_gns_ictr_gn_zs+", "+time_del_ms_mil+", "+sp_dyn_tfrt_in+", "+en_atm_co2e_pc+","+SP_POP_5559_FE_5Y+","+NE_IMP_GNFS_ZS+","+NY_GDS_TOTL_ZS+","+TM_VAL_FUEL_ZS_UN+","+FS_AST_PRVT_GD_ZS+","+SE_PRM_ENRR+","+NV_SRV_TETC_ZS+","+dev_AG_PRD_FOOD_XD+","+IT_CEL_SETS_P2+","+SP_DYN_CDRT_IN+","+time_diff_SP_POP_DPND+","+NY_ADJ_DCO2_GN_ZS+","+NV_IND_TOTL_ZS+", "+SP_DYN_LE00_MA_IN+" ,"+SP_DYN_TO65_MA_ZS+", "+FI_RES_TOTL_MO+","+time_del_AG_PRD_CROP_XD+","+NY_GDP_DEFL_KD_ZG+","+SP_DYN_LE00_FE_IN+","+SP_RUR_TOTL_ZS+","+NE_TRD_GNFS_ZS+" ]}",
+         success: function (data) {
+           var chance = 100 * data["score"];
+           d3.select("#chancebar")
+             .attr("width", chance_scale(chance));
+           d3.select("#percent_text")
+             .attr("x", chance_scale(chance-5))
+             .text(chance.toFixed(1) + "%");
+         },
+         error: function (result) {
+         }
+       })
+     }
+
+     <!-- SLIDERS -->
+
+     
+    d3.select('#pop_dpnd_old_slider')
+      .call(
+        d3.slider()
+          .value(current_pop_dpnd_old)
+          .max(30)
+          .min(0)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_pop_dpnd_ol').text(value);
+            current_pop_dpnd_old = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#sp_dyn_imrt_in_slider')
+      .call(
+        d3.slider()
+          .value(current_sp_dyn_imrt_in)
+          .min(0)
+          .max(200)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_dyn_imrt_in').text(value);
+            current_sp_dyn_imrt_in = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#sp_dyn_mort_slider')
+      .call(
+        d3.slider()
+          .value(current_sp_dyn_mort)
+          .min(0)
+          .max(200)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_dyn_mort').text(value);
+            current_sp_dyn_mort = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#ny_gdp_frst_rt_zs_slider')
+      .call(
+        d3.slider()
+          .value(current_ny_gdp_frst_rt_zs)
+          .min(0)
+          .max(70)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#ny_gdp_frst_rt_zs').text(value);
+            current_ny_gdp_frst_rt_zs = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+     
+    d3.select('#dev_sp_pop_2024_fe_5y_slider')
+      .call(
+        d3.slider()
+          .value(current_dev_sp_pop_2024_fe_5y)
+          .min(-5)
+          .max(5)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#dev_sp_pop_2024_fe_5y').text(value);
+            current_dev_sp_pop_2024_fe_5y = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#sp_pop_2024_fe_5y_slider')
+      .call(
+        d3.slider()
+          .value(current_sp_pop_2024_fe_5y)
+          .min(0)
+          .max(20)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_pop_2024_fe_5y').text(value);
+            current_sp_pop_2024_fe_5y = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#sp_pop_3034_fe_5y_slider')
+      .call(
+        d3.slider()
+          .value(current_sp_pop_3034_fe_5y)
+          .min(0)
+          .max(20)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_pop_3034_fe_5y').text(value);
+            current_sp_pop_3034_fe_5y = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+
+    d3.select('#ny_gns_ictr_gn_zs_slider')
+      .call(
+        d3.slider()
+          .value(current_ny_gns_ictr_gn_zs)
+          .min(-200)
+          .max(110)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#ny_gns_ictr_gn_zs').text(value);
+            current_ny_gns_ictr_gn_zs = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+
+    d3.select('#time_del_ms_mil_slider')
+      .call(
+        d3.slider()
+          .value(current_time_del_ms_mil)
+          .min(-200)
+          .max(110)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#time_del_ms_mil').text(value);
+            current_time_del_ms_mil = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+    d3.select('#sp_dyn_tfrt_in_slider')
+      .call(
+        d3.slider()
+          .value(current_sp_dyn_tfrt_in)
+          .min(0)
+          .max(10)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#sp_dyn_tfrt_in').text(value);
+            current_sp_dyn_tfrt_in = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+    d3.select('#en_atm_co2e_pc_slider')
+      .call(
+        d3.slider()
+          .value(current_en_atm_co2e_pc)
+          .min(0)
+          .max(10)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#en_atm_co2e_pc').text(value);
+            current_en_atm_co2e_pc = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+
+
+     d3.select('#SP_POP_5559_FE_5Y_slider')
+       .call(
+         d3.slider()
+           .value(current_SP_POP_5559_FE_5Y)
+           .min(0)
+           .max(10)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#SP_POP_5559_FE_5Y').text(value);
+            current_SP_POP_5559_FE_5Y = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+    d3.select('#NE_IMP_GNFS_ZS_slider')
+      .call(
+        d3.slider()
+          .value(current_NE_IMP_GNFS_ZS)
+          .min(0)
+     .max(450)
+          .step(1)
+          .axis(true)
+          .on("slide", function(evt,value) {
+            d3.select('#NE_IMP_GNFS_ZS').text(value);
+            current_NE_IMP_GNFS_ZS = value;
+            getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+           }
+           )
+     );
+     
+    d3.select('#NY_GDS_TOTL_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_NY_GDS_TOTL_ZS)
+	  .min(-250)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NY_GDS_TOTL_ZS').text(value);
+	    current_NY_GDS_TOTL_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+     );
+
+    d3.select('#TM_VAL_FUEL_ZS_UN_slider')
+      .call(
+	d3.slider()
+	  .value(current_TM_VAL_FUEL_ZS_UN)
+	  .min(0)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#TM_VAL_FUEL_ZS_UN').text(value);
+	    current_TM_VAL_FUEL_ZS_UN = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#FS_AST_PRVT_GD_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_FS_AST_PRVT_GD_ZS)
+	  .min(0)
+	  .max(250)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#FS_AST_PRVT_GD_ZS').text(value);
+	    current_FS_AST_PRVT_GD_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SE_PRM_ENRR_slider')
+      .call(
+	d3.slider()
+	  .value(current_SE_PRM_ENRR)
+	  .min(0)
+	  .max(200)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SE_PRM_ENRR').text(value);
+	    current_SE_PRM_ENRR = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#NV_SRV_TETC_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_NV_SRV_TETC_ZS)
+	  .min(0)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NV_SRV_TETC_ZS').text(value);
+	    current_NV_SRV_TETC_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#dev_AG_PRD_FOOD_XD_slider')
+      .call(
+	d3.slider()
+	  .value(current_dev_AG_PRD_FOOD_XD)
+	  .min(-100)
+	  .max(1000)
+	  .step(5)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#dev_AG_PRD_FOOD_XD').text(value);
+	    current_dev_AG_PRD_FOOD_XD = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#IT_CEL_SETS_P2_slider')
+      .call(
+	d3.slider()
+	  .value(current_IT_CEL_SETS_P2)
+	  .min(0)
+	  .max(220)
+	  .step(5)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#IT_CEL_SETS_P2').text(value);
+	    current_IT_CEL_SETS_P2 = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SP_DYN_CDRT_IN_slider')
+      .call(
+	d3.slider()
+	  .value(current_SP_DYN_CDRT_IN)
+	  .min(1)
+	  .max(50)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SP_DYN_CDRT_IN').text(value);
+	    current_SP_DYN_CDRT_IN = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#time_diff_SP_POP_DPND_slider')
+      .call(
+	d3.slider()
+	  .value(current_time_diff_SP_POP_DPND)
+	  .min(-20)
+	  .max(5)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#time_diff_SP_POP_DPND').text(value);
+	    current_time_diff_SP_POP_DPND = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#NY_ADJ_DCO2_GN_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_NY_ADJ_DCO2_GN_ZS)
+	  .min(0)
+	  .max(25)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NY_ADJ_DCO2_GN_ZS').text(value);
+	    current_NY_ADJ_DCO2_GN_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#NV_IND_TOTL_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_NV_IND_TOTL_ZS)
+	  .min(0)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NV_IND_TOTL_ZS').text(value);
+	    current_NV_IND_TOTL_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SP_DYN_LE00_MA_IN_slider')
+      .call(
+	d3.slider()
+	  .value(current_SP_DYN_LE00_MA_IN)
+	  .min(25)
+	  .max(85)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SP_DYN_LE00_MA_IN').text(value);
+	    current_SP_DYN_LE00_MA_IN = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SP_DYN_TO65_MA_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_SP_DYN_TO65_MA_ZS)
+	  .min(0)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SP_DYN_TO65_MA_ZS').text(value);
+	    current_SP_DYN_TO65_MA_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#FI_RES_TOTL_MO_slider')
+      .call(
+	d3.slider()
+	  .value(current_FI_RES_TOTL_MO)
+	  .min(0)
+	  .max(44)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#FI_RES_TOTL_MO').text(value);
+	    current_FI_RES_TOTL_MO = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#time_del_AG_PRD_CROP_XD_slider')
+      .call(
+	d3.slider()
+	  .value(current_time_del_AG_PRD_CROP_XD)
+	  .min(-140)
+	  .max(90)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#time_del_AG_PRD_CROP_XD').text(value);
+	    current_time_del_AG_PRD_CROP_XD = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#NY_GDP_DEFL_KD_ZG_slider')
+      .call(
+	d3.slider()
+	  .value(current_NY_GDP_DEFL_KD_ZG)
+	  .min(-30)
+	  .max(300)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NY_GDP_DEFL_KD_ZG').text(value);
+	    current_NY_GDP_DEFL_KD_ZG = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SP_DYN_LE00_FE_IN_slider')
+      .call(
+	d3.slider()
+	  .value(current_SP_DYN_LE00_FE_IN)
+	  .min(30)
+	  .max(90)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SP_DYN_LE00_FE_IN').text(value);
+	    current_SP_DYN_LE00_FE_IN = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#SP_RUR_TOTL_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_SP_RUR_TOTL_ZS)
+	  .min(0)
+	  .max(100)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#SP_RUR_TOTL_ZS').text(value);
+	    current_SP_RUR_TOTL_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+    d3.select('#NE_TRD_GNFS_ZS_slider')
+      .call(
+	d3.slider()
+	  .value(current_NE_TRD_GNFS_ZS)
+	  .min(0)
+	  .max(500)
+	  .step(1)
+	  .axis(true)
+	  .on("slide", function(evt,value) {
+	    d3.select('#NE_TRD_GNFS_ZS').text(value);
+	    current_NE_TRD_GNFS_ZS = value;
+	    getAndDrawChance(current_pop_dpnd_old, current_sp_dyn_imrt_in, current_sp_dyn_mort,current_ny_gdp_frst_rt_zs, current_dev_sp_pop_2024_fe_5y,  current_sp_pop_2024_fe_5y, current_sp_pop_3034_fe_5y, current_ny_gns_ictr_gn_zs, current_time_del_ms_mil, current_sp_dyn_tfrt_in, current_en_atm_co2e_pc , current_SP_POP_5559_FE_5Y, current_NE_IMP_GNFS_ZS, current_NY_GDS_TOTL_ZS, current_TM_VAL_FUEL_ZS_UN, current_FS_AST_PRVT_GD_ZS, current_SE_PRM_ENRR, current_NV_SRV_TETC_ZS, current_dev_AG_PRD_FOOD_XD, current_IT_CEL_SETS_P2, current_SP_DYN_CDRT_IN, current_time_diff_SP_POP_DPND, current_NY_ADJ_DCO2_GN_ZS, current_NV_IND_TOTL_ZS, current_SP_DYN_LE00_MA_IN, current_SP_DYN_TO65_MA_ZS, current_FI_RES_TOTL_MO, current_time_del_AG_PRD_CROP_XD, current_NY_GDP_DEFL_KD_ZG, current_SP_DYN_LE00_FE_IN, current_SP_RUR_TOTL_ZS, current_NE_TRD_GNFS_ZS)
+	   }
+	   )
+    );
+
+     
+    </script>
+  </body>
+</html>
