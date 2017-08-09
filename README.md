@@ -49,5 +49,6 @@ The features (not necessarily in order of importance) found to best predict whet
 
 The following heatmap shows the correlation of the various features of my model with eachother based on this data set. The target variable, 'shrinking', is 0 if the economy instance grew in the measurement period following the indicator measurements and 1 if the economy instance was shrinking in the measurement period following the indicator measurements.
 
-![Feature Correlation Heatmap]
+![Image of Feature Correlation Heatmap]
+
 (https://github.com/lefed/world_bank_indicators_economic_predictions/blob/master/graphs/corr_heatmap.png)
