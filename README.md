@@ -1,4 +1,5 @@
-# world_bank_indicators_economic_predictions
+# World Bank Development Indicators - Use for Economic Predictions
+
 This project was done to practice machine learning classification modeling. 
 My model was optimized to predict whether an economy would be growing or shrinking in the next measured year. 
 It uses the World Bank Open Data Initiative's world development indicators published in July 2017.
@@ -50,3 +51,31 @@ The features (not necessarily in order of importance) found to best predict whet
 The following heatmap shows the correlation of the various features of my model with eachother based on this data set. The target variable, 'shrinking', is 0 if the economy instance grew in the measurement period following the indicator measurements and 1 if the economy instance was shrinking in the measurement period following the indicator measurements.
 
 ![](https://github.com/lefed/world_bank_indicators_economic_predictions/blob/master/graphs/corr_heatmap.png)
+
+In order to better understand model performance of possible classification models such as Logistic Regression, Random Forest Classification, Gradient Boosted Trees, K Nearest Neighbors and others, I plotted each model's precision-recall curve and ROC curve to understand where different models may be performing well and to help with model or ensemble selection.
+
+The following curves show how these models performed over various thresholds for classification as compared to eachother. Note that these models were all done using the final selected 33 features related to 32 development indicators.
+
+![](https://github.com/lefed/world_bank_indicators_economic_predictions/blob/master/graphs/PR_ROC_regression_curves.png)
+
+Based on the results of these curves, I chose to use a Gradient Boosted Trees classification model with tuned learning rate, exponential loss function, and 75 trees.
+
+The precision-recall curve and ROC curve for this specific model can be seen below.
+
+![](https://github.com/lefed/world_bank_indicators_economic_predictions/blob/master/graphs/grad_boosted_trees_pr_roc.png)
+
+The precision-recall tradeoff for various model thresholds for this particular model can be seen in the following graphic. 
+
+![](https://github.com/lefed/world_bank_indicators_economic_predictions/blob/master/graphs/grad_boost_pr_tradeoff.png)
+
+Given that I was thinking of a use case of my model as being used to find economies at risk of decline in order to try to provide intervention, I chose to use a threshold where my model could achieve a recall of 83% - meaning it correctly classified 83% of economies that were about to go into decline - with 25.5% precision. 
+
+Using this threshold resulted in the following scores for my model:
+
+Precision - 25.5%
+Recall - 82.6%
+F1 Score - 0.389
+Log-Loss - 0.48 (Note that I chose to prioritize good ranking performance over good prediction of probabilities.)
+ROC AUC - 0.66
+Accuracy - 48%
+
