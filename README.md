@@ -72,10 +72,10 @@ Given that I was thinking of a use case of my model as being used to find econom
 
 Using this threshold resulted in the following scores for my model:
 
-Precision - 25.5%
-Recall - 82.6%
-F1 Score - 0.389
-Log-Loss - 0.48 (Note that I chose to prioritize good ranking performance over good prediction of probabilities.)
-ROC AUC - 0.66
-Accuracy - 48%
+* Precision - 25.5%
+* Recall - 82.6%
+* F1 Score - 0.389
+* Log-Loss - 0.48 (Note that I chose to prioritize good ranking performance over good prediction of probabilities.)
+* ROC AUC - 0.66
+* Accuracy - 48%
 
